@@ -411,12 +411,15 @@ class Client(Worker):
                 role='Client #{}'.format(self.ID),
                 forms='raw',
                 return_raw=True)
-            self._monitor.update_best_result(
+            update_best_this_round = self._monitor.update_best_result(
                 self.best_results,
                 formatted_eval_res['Results_raw'],
                 results_type=f"client #{self.ID}",
                 round_wise_update_key=self._cfg.eval.
                 best_res_update_round_wise_key)
+            if update_best_this_round:
+                model_param = self.ctx.model.state_dict() if self._cfg.federate.share_local_model else self.trainer.ctx.model.cpu().state_dict()
+                self.trainer.ctx.best_model = copy.deepcopy(model_param)
             self.history_results = merge_dict(
                 self.history_results, formatted_eval_res['Results_raw'])
             self.early_stopper.track_and_check(self.history_results[
@@ -448,6 +451,8 @@ class Client(Worker):
         # Save final prediction result
         if self._cfg.data.type == 'cikmcup':
             # Evaluate
+            self.trainer.ctx.model.load_state_dict(self.trainer.ctx.best_model,strict=self._cfg.federate.share_local_model)
+            self.trainer.save_model(path=os.path.join(self._cfg.outdir,f"{self.ID}_bestmodel.pt"))
             self.trainer.evaluate(target_data_split_name='test')
             self.trainer.save_prediction(self._cfg.outdir, self.ID, self._cfg.model.task)
             logger.info(f"Client #{self.ID} finished saving prediction results in {os.path.abspath(os.path.join(self._cfg.outdir, 'prediction.csv'))}")

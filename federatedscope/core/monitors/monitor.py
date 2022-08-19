@@ -577,38 +577,37 @@ class Monitor(object):
                         f"the keys of results are {list(new_results.keys())}")
 
                 for key in sorted_keys:
-                    cur_result = new_results[key]
-                    if update_best_this_round or \
-                            ('loss' in round_wise_update_key and 'loss' in
-                             key) or \
-                            ('std' in round_wise_update_key and 'std' in key):
-                        # The smaller the better
-                        if results_type in [
-                                "client_best_individual",
-                                "unseen_client_best_individual"
-                        ]:
-                            cur_result = min(cur_result)
-                        if update_best_this_round or \
-                                key not in best_result or cur_result < \
-                                best_result[key]:
+                    if update_best_this_round or key == round_wise_update_key:
+                        cur_result = new_results[key]
+                        if  'loss' in key or 'std' in key:
+                            # The smaller the better
+                            if results_type in [
+                                    "client_best_individual",
+                                    "unseen_client_best_individual"
+                            ]:
+                                cur_result = min(cur_result)
+                            if update_best_this_round or \
+                                    key not in best_result or cur_result < \
+                                    best_result[key]:
+                                best_result[key] = cur_result
+                                update_best_this_round = True
+                        elif 'acc' in key or 'imp_ratio' in key:
+                            # The larger the better
+                            if results_type in [
+                                    "client_best_individual",
+                                    "unseen_client_best_individual"
+                            ]:
+                                cur_result = max(cur_result)
+                            if update_best_this_round or \
+                                    key not in best_result or cur_result > \
+                                    best_result[key]:
+                                best_result[key] = cur_result
+                                update_best_this_round = True
+                        elif 'total' in key:
                             best_result[key] = cur_result
-                            update_best_this_round = True
-                    elif update_best_this_round or \
-                            'acc' in round_wise_update_key and 'acc' in key:
-                        # The larger the better
-                        if results_type in [
-                                "client_best_individual",
-                                "unseen_client_best_individual"
-                        ]:
-                            cur_result = max(cur_result)
-                        if update_best_this_round or \
-                                key not in best_result or cur_result > \
-                                best_result[key]:
-                            best_result[key] = cur_result
-                            update_best_this_round = True
-                    else:
-                        # unconcerned metric
-                        pass
+                        else:
+                            # unconcerned metric
+                            pass
 
         if update_best_this_round:
             line = f"Find new best result: {best_results}"
@@ -629,3 +628,4 @@ class Monitor(object):
                     logger.error(
                         "cfg.wandb.use=True but not install the wandb package")
                     exit()
+        return update_best_this_round

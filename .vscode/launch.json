@@ -1,0 +1,26 @@
+{
+    // 使用 IntelliSense 了解相关属性。
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "--cfg",
+                "federatedscope/gfl/baseline/isolated_cikmcup_avgloss.yaml",
+                "--client_cfg",
+                "federatedscope/gfl/baseline/cikmcup_per_client.yaml",
+                "train.local_update_steps",
+                "1",
+                "federate.total_round_num",
+                "1",
+            ],
+        }
+    ]
+}

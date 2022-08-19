@@ -520,7 +520,7 @@ def load_external_data(config=None):
     return data_local_dict, modified_config
 
 
-def get_data(config):
+def get_data(config,client_cfg=None):
     """Instantiate the dataset and update the configuration accordingly if
     necessary.
     Arguments:
@@ -574,7 +574,7 @@ def get_data(config):
         data, modified_config = load_external_data(config)
     elif 'cikmcup' in config.data.type.lower():
         from federatedscope.gfl.dataset.cikm_cup import load_cikmcup_data
-        data, modified_config = load_cikmcup_data(config)
+        data, modified_config = load_cikmcup_data(config,client_cfg)
     else:
         raise ValueError('Data {} not found.'.format(config.data.type))
 

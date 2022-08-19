@@ -3,7 +3,7 @@ import sys
 
 from yacs.config import CfgNode
 
-DEV_MODE = False  # simplify the federatedscope re-setup everytime we change
+DEV_MODE = True  # simplify the federatedscope re-setup everytime we change
 # the source codes of federatedscope
 if DEV_MODE:
     file_dir = os.path.join(os.path.dirname(__file__), '..')
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # federated dataset might change the number of clients
     # thus, we allow the creation procedure of dataset to modify the global
     # cfg object
-    data, modified_cfg = get_data(config=init_cfg.clone())
+    data, modified_cfg = get_data(config=init_cfg.clone(),client_cfg=client_cfg)
     init_cfg.merge_from_other_cfg(modified_cfg)
 
     init_cfg.freeze()

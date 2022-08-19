@@ -50,7 +50,7 @@ class CIKMCUPDataset(InMemoryDataset):
             return self.inmemory_data[idx]
 
 
-def load_cikmcup_data(config):
+def load_cikmcup_data(config,client_cfg):
     from torch_geometric.loader import DataLoader
 
     # Build data
@@ -67,19 +67,23 @@ def load_cikmcup_data(config):
         logger.info(f'Loading CIKMCUP data for Client #{client_idx}.')
         dataloader_dict = {}
         tmp_dataset = []
+        try:
+            batch_size = client_cfg.get('client_{}'.format(client_idx)).data.batch_size
+        except:
+            batch_size = config.data.batch_size
         if 'train' in dataset[client_idx]:
             dataloader_dict['train'] = DataLoader(dataset[client_idx]['train'],
-                                                  config.data.batch_size,
+                                                  batch_size,
                                                   shuffle=config.data.shuffle)
             tmp_dataset += dataset[client_idx]['train']
         if 'val' in dataset[client_idx]:
             dataloader_dict['val'] = DataLoader(dataset[client_idx]['val'],
-                                                config.data.batch_size,
+                                                batch_size,
                                                 shuffle=False)
             tmp_dataset += dataset[client_idx]['val']
         if 'test' in dataset[client_idx]:
             dataloader_dict['test'] = DataLoader(dataset[client_idx]['test'],
-                                                 config.data.batch_size,
+                                                 batch_size,
                                                  shuffle=False)
             tmp_dataset += dataset[client_idx]['test']
         if tmp_dataset:

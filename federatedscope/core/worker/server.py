@@ -356,20 +356,23 @@ class Server(Worker):
         """
 
         # early stopping
-        if "Results_weighted_avg" in self.history_results and \
-                self._cfg.eval.best_res_update_round_wise_key in \
-                self.history_results['Results_weighted_avg']:
-            should_stop = self.early_stopper.track_and_check(
-                self.history_results['Results_weighted_avg'][
-                    self._cfg.eval.best_res_update_round_wise_key])
-        elif "Results_avg" in self.history_results and \
-                self._cfg.eval.best_res_update_round_wise_key in \
-                self.history_results['Results_avg']:
-            should_stop = self.early_stopper.track_and_check(
-                self.history_results['Results_avg'][
-                    self._cfg.eval.best_res_update_round_wise_key])
-        else:
+        if self._cfg.federate.method in ["local"]:
             should_stop = False
+        else:
+            if "Results_weighted_avg" in self.history_results and \
+                    self._cfg.eval.best_res_update_round_wise_key in \
+                    self.history_results['Results_weighted_avg']:
+                should_stop = self.early_stopper.track_and_check(
+                    self.history_results['Results_weighted_avg'][
+                        self._cfg.eval.best_res_update_round_wise_key])
+            elif "Results_avg" in self.history_results and \
+                    self._cfg.eval.best_res_update_round_wise_key in \
+                    self.history_results['Results_avg']:
+                should_stop = self.early_stopper.track_and_check(
+                    self.history_results['Results_avg'][
+                        self._cfg.eval.best_res_update_round_wise_key])
+            else:
+                should_stop = False
 
         if should_stop:
             self._monitor.global_converged()

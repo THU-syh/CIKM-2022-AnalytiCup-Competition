@@ -22,6 +22,8 @@ client_2:
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.289617
+  data:
+    batch_size: 8
 client_3:
   model:
     out_channels: 2
@@ -58,6 +60,8 @@ client_5:
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.396825
+  data:
+    batch_size: 8
 client_6:
   model:
     out_channels: 2
@@ -115,11 +119,13 @@ client_10:
   train:
     optimizer:
       lr: 0.05
-  grad:
-    grad_clip: 1.0
+  # grad:
+  #   grad_clip: 1.0
   eval:
     metrics: ['mse','imp_ratio']
     base: 0.007083
+  data:
+    batch_size: 256
 client_11:
   model:
     out_channels: 1
@@ -153,8 +159,10 @@ client_13:
   train:
     optimizer:
       lr: 0.05
-  grad:
-    grad_clip: 1.0
+  # grad:
+  #   grad_clip: 1.0
   eval:
     metrics: ['mse','imp_ratio']
     base: 0.004389
+  data:
+    batch_size: 256

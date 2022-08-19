@@ -1,8 +1,12 @@
 # project specific
 doc/build
+*.log
 
 # ml log
 wandb/
+exp/
+data/
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

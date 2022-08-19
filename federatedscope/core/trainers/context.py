@@ -98,6 +98,7 @@ class Context(dict):
 
         self.cfg = cfg
         self.model = model
+        self.best_model = None
         self.data = data
         self.device = device
         self.cur_mode = None
