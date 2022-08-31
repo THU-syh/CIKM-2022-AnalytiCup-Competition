@@ -13,6 +13,7 @@ def extend_fl_setting_cfg(cfg):
     cfg.federate = CN()
 
     cfg.federate.client_num = 0
+    cfg.federate.clients_id = [] # just for cikmcup
     cfg.federate.sample_client_num = -1
     cfg.federate.sample_client_rate = -1.0
     cfg.federate.unseen_clients_rate = 0.0

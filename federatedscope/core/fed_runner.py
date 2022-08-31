@@ -211,7 +211,7 @@ class FedRunner(object):
             else:
                 server_data = None
                 model = get_model(
-                    self.cfg.model, self.data[1], backend=self.cfg.backend
+                    self.cfg.model, self.data[self.cfg.federate.clients_id[0]], backend=self.cfg.backend
                 )  # get the model according to client's data if the server
                 # does not own data
             kw = {'shared_comm_queue': self.shared_comm_queue}
@@ -260,7 +260,7 @@ class FedRunner(object):
         """
         self.server_id = 0
         if self.mode == 'standalone':
-            client_data = self.data[client_id]
+            client_data = self.data[self.cfg.federate.clients_id[client_id-1]]
             kw = {'shared_comm_queue': self.shared_comm_queue}
         elif self.mode == 'distributed':
             client_data = self.data
@@ -276,7 +276,7 @@ class FedRunner(object):
             if self.client_cfg:
                 client_specific_config.defrost()
                 client_specific_config.merge_from_other_cfg(
-                    self.client_cfg.get('client_{}'.format(client_id)))
+                    self.client_cfg.get('client_{}'.format(self.cfg.federate.clients_id[client_id-1])))
                 client_specific_config.freeze()
             client_device = self._server_device if \
                 self.cfg.federate.share_local_model else \
@@ -299,7 +299,7 @@ class FedRunner(object):
             logger.info('Client (address {}:{}) has been set up ... '.format(
                 self.client_address['host'], self.client_address['port']))
         else:
-            logger.info(f'Client {client_id} has been set up ... ')
+            logger.info(f'Client {self.cfg.federate.clients_id[client_id-1]} has been set up ... ')
 
         return client
 

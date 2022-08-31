@@ -7,9 +7,9 @@ early_stop:
   the_smaller_the_better: False
 federate:
   mode: standalone
-  method: local
+  method: pFedMe
   make_global_eval: False
-  total_round_num: 200
+  total_round_num: 100
   share_local_model: False
   client_num: 13
   clients_id: []
@@ -22,13 +22,15 @@ model:
   hidden: 64
 personalization:
   local_param: ['encoder_atom', 'encoder', 'clf']
+  K: 5  # the local approximation steps for pFedMe
+  beta: 1.0  # the average moving parameter for pFedMe
+  regular_weight: 15
 train:
   batch_or_epoch: epoch
   local_update_steps: 1
   optimizer:
     weight_decay: 0.0005
     type: SGD
-    momentum: 0.9
 trainer:
   type: graphminibatch_trainer
 eval:

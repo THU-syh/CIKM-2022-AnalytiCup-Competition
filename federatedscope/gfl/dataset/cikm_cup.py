@@ -56,14 +56,14 @@ def load_cikmcup_data(config,client_cfg):
     # Build data
     logger.info(f'Loading CIKMCUP data from {os.path.abspath(os.path.join(config.data.root, "CIKM22Competition"))}.')
     dataset = CIKMCUPDataset(config.data.root)
-    config.merge_from_list(['federate.client_num', len(dataset)])
+    # config.merge_from_list(['federate.client_num', len(dataset)])
 
     if len(dataset) == 0:
         raise FileNotFoundError(f'Cannot load CIKMCUP data from {os.path.abspath(os.path.join(config.data.root, "CIKM22Competition"))}, please check if the directory is correct.')
 
     data_dict = {}
     # Build DataLoader dict
-    for client_idx in range(1, config.federate.client_num + 1):
+    for client_idx in config.federate.clients_id:
         logger.info(f'Loading CIKMCUP data for Client #{client_idx}.')
         dataloader_dict = {}
         tmp_dataset = []

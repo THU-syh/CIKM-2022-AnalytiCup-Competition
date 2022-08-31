@@ -36,6 +36,8 @@ def extend_data_cfg(cfg):
     cfg.data.graphsaint = CN()
     cfg.data.graphsaint.walk_length = 2
     cfg.data.graphsaint.num_steps = 30
+    # just for cikmcup
+    cfg.data.labels_distribution = []
 
     # quadratic
     cfg.data.quadratic = CN()

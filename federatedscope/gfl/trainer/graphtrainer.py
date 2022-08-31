@@ -2,6 +2,7 @@ import logging
 import os
 
 import numpy as np
+import torch
 
 from federatedscope.core.monitors import Monitor
 from federatedscope.register import register_trainer
@@ -14,22 +15,41 @@ class GraphMiniBatchTrainer(GeneralTorchTrainer):
     def _hook_on_fit_start_init(self, ctx):
         super()._hook_on_fit_start_init(ctx)
         setattr(ctx, "{}_y_inds".format(ctx.cur_data_split), [])
+        if len(ctx.cfg.data.labels_distribution) > 1 and ctx.cfg.criterion.type == "ReweightLoss":
+            weight = torch.Tensor(self.ctx.cfg.data.labels_distribution)
+            ctx.criterion.set_weight(weight)
 
     def _hook_on_batch_forward(self, ctx):
         batch = ctx.data_batch.to(ctx.device)
         pred = ctx.model(batch)
         # TODO: deal with the type of data within the dataloader or dataset
+        # now we hard code it for cikmcup
         if 'regression' in ctx.cfg.model.task.lower():
             label = batch.y
+            # Like [['Normalize', {'mean': [0.1307], 'std': [0.3081]}]]
+            if len(ctx.cfg.data.target_transform)==1 and ctx.cfg.data.target_transform[0][0] == "Normalize":
+                mean = torch.Tensor(ctx.cfg.data.target_transform[0][1]['mean']).to(ctx.device)
+                std = torch.Tensor(ctx.cfg.data.target_transform[0][1]['std']).to(ctx.device)
+                origin_label = label.clone().detach()
+                true_pred = pred.clone().detach()*std+mean
+                label = (label-mean)/std
         else:
-            label = batch.y.squeeze(-1).long()
+            if ctx.cfg.model.out_channels == 1:
+                label = batch.y.float()
+                pred = torch.sigmoid(pred)
+            else:
+                label = batch.y.squeeze(-1).long()
         if len(label.size()) == 0:
             label = label.unsqueeze(0)
         ctx.loss_batch = ctx.criterion(pred, label)
 
         ctx.batch_size = len(label)
-        ctx.y_true = label
-        ctx.y_prob = pred
+        if 'regression' in ctx.cfg.model.task.lower() and len(ctx.cfg.data.target_transform)==1 and ctx.cfg.data.target_transform[0][0] == "Normalize":
+            ctx.y_true = origin_label
+            ctx.y_prob = true_pred
+        else:
+            ctx.y_true = label
+            ctx.y_prob = pred
 
         # record the index of the ${MODE} samples
         if hasattr(ctx.data_batch, 'data_index'):
@@ -89,7 +109,13 @@ class GraphMiniBatchTrainer(GeneralTorchTrainer):
         os.makedirs(path, exist_ok=True)
 
         # TODO: more feasible, for now we hard code it for cikmcup
-        y_preds = np.argmax(y_probs, axis=-1) if 'classification' in task_type.lower() else y_probs
+        if 'regression' in task_type.lower():
+            y_preds = y_probs
+        else:
+            if self.cfg.model.out_channels > 1:
+                y_preds = np.argmax(y_probs, axis=-1)
+            else:
+                y_preds = np.round(y_probs.squeeze(-1)).astype('int')
 
         if len(y_inds) != len(y_preds):
             raise ValueError(f'The length of the predictions {len(y_preds)} not equal to the samples {len(y_inds)}.')
@@ -97,9 +123,9 @@ class GraphMiniBatchTrainer(GeneralTorchTrainer):
         with open(os.path.join(path, 'prediction.csv'), 'a') as file:
             for y_ind, y_pred in zip(y_inds,  y_preds):
                 if 'classification' in task_type.lower():
-                    line = [client_id, y_ind] + [y_pred]
+                    line = [self.cfg.federate.clients_id[client_id-1], y_ind] + [y_pred]
                 else:
-                    line = [client_id, y_ind] + list(y_pred)
+                    line = [self.cfg.federate.clients_id[client_id-1], y_ind] + list(y_pred)
                 file.write(','.join([str(_) for _ in line]) + '\n')
 
 

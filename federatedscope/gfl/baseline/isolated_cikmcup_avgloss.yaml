@@ -10,7 +10,8 @@ federate:
   make_global_eval: False
   total_round_num: 1000
   share_local_model: False
-  client_num: 13
+  client_num: 1
+  clients_id: [5]
 data:
   batch_size: 64
   root: data/

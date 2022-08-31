@@ -2,8 +2,8 @@ use_gpu: True
 device: 0
 early_stop:
   delta: 0.0
-  patience: 20
-  improve_indicator_mode: mean
+  patience: 10
+  improve_indicator_mode: best
   the_smaller_the_better: False
 federate:
   mode: 'standalone'
@@ -11,6 +11,7 @@ federate:
   total_round_num: 200
   share_local_model: False
   client_num: 13
+  clients_id: []
 data:
   root: data/
   type: cikmcup
@@ -20,11 +21,12 @@ data:
 personalization:
   local_param: ['encoder_atom', 'encoder', 'clf']
 train:
-  batch_or_epoch: epoch
+  batch_or_epoch: batch
   local_update_steps: 1
   optimizer:
-    type: SGD
     weight_decay: 0.0005
+    type: SGD
+    momentum: 0.9
 trainer:
   type: graphminibatch_trainer
 model:
@@ -32,10 +34,10 @@ model:
   task: graph
   hidden: 64
   dropout: 0.5
-grad:
-  grad_clip: 0.5
+# grad:
+#   grad_clip: 0.5
 eval:
-  freq: 50
+  freq: 1
   metrics: ['imp_ratio']
   report: ['avg']
   best_res_update_round_wise_key: val_imp_ratio

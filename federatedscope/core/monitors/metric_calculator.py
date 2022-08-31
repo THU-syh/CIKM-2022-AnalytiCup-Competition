@@ -85,7 +85,10 @@ class MetricCalculator(object):
                 y_prob = np.expand_dims(y_prob, axis=-1)
 
             # if len(y_prob.shape) > len(y_true.shape):
-            y_pred = np.argmax(y_prob, axis=1)
+            if ctx.cfg.model.out_channels == 1: # N*1*1
+                y_pred = np.round(np.squeeze(y_prob,axis=-1)).astype('int')
+            else:
+                y_pred = np.argmax(y_prob, axis=1)
 
             # check shape and type
             if not isinstance(y_true, np.ndarray):

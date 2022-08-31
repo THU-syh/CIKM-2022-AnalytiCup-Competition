@@ -30,6 +30,9 @@ if __name__ == '__main__':
 
     update_logger(init_cfg)
     setup_seed(init_cfg.seed)
+    if len(init_cfg.federate.clients_id) == 0:
+        init_cfg.federate.clients_id = list(range(1,init_cfg.federate.client_num+1))
+    assert len(init_cfg.federate.clients_id) == init_cfg.federate.client_num
 
     # load clients' cfg file
     client_cfg = CfgNode.load_cfg(open(args.client_cfg_file,

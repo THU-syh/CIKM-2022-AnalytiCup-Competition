@@ -13,13 +13,13 @@
             "justMyCode": true,
             "args": [
                 "--cfg",
-                "federatedscope/gfl/baseline/isolated_cikmcup_avgloss.yaml",
+                "federatedscope/gfl/baseline/isolated_cikmcup_impratio.yaml",
                 "--client_cfg",
-                "federatedscope/gfl/baseline/cikmcup_per_client.yaml",
+                "federatedscope/gfl/baseline/cikmcup_per_client_normalize.yaml",
                 "train.local_update_steps",
                 "1",
                 "federate.total_round_num",
-                "1",
+                "100",
             ],
         }
     ]

@@ -43,7 +43,7 @@ class EarlyStopper(object):
         self.delta = delta
         self.improve_indicator_mode = improve_indicator_mode
         # For expansion usages of comparisons
-        self.comparator = operator.lt
+        self.comparator = operator.lt if the_smaller_the_better else operator.gt
         self.improvement_operator = operator.add
 
     def __track_and_check_dummy(self, new_result):

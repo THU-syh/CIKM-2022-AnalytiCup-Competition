@@ -1,99 +1,115 @@
 client_1:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
-      lr: 0.01
+      lr: 0.1
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.263789
+  data:
+    labels_distribution: [0.6117, 0.3883]
 client_2:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
       lr: 0.01
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.289617
+  data:
+    labels_distribution: [0.5912, 0.4088]
 client_3:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
       lr: 0.001
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.355404
+  data:
+    labels_distribution: [0.5561, 0.4439]
 client_4:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
       lr: 0.01
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.176471
+  data:
+    labels_distribution: [0.3465, 0.6535]
 client_5:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
       lr: 0.0001
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.396825
+  data:
+    labels_distribution: [0.6117, 0.3883]
 client_6:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
-      lr: 0.01
+      lr: 0.0005
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.261580
+  data:
+    labels_distribution: [0.2670, 0.7330]
 client_7:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
       lr: 0.01
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.302378
+  data:
+    labels_distribution: [0.5548, 0.4452]
 client_8:
   model:
-    out_channels: 2
+    out_channels: 1
     task: graphClassification
   criterion:
-    type: CrossEntropyLoss
+    type: ReweightLoss
   train:
     optimizer:
-      lr: 0.005
+      lr: 0.05
   eval:
     metrics: ['acc','imp_ratio']
     base: 0.211538
+  data:
+    labels_distribution: [0.1660, 0.8340]
 client_9:
   model:
     out_channels: 1
@@ -102,7 +118,7 @@ client_9:
     type: MSELoss
   train:
     optimizer:
-      lr: 0.05
+      lr: 0.1
   eval:
     metrics: ['mse','imp_ratio']
     base: 0.059199
@@ -140,7 +156,7 @@ client_11:
     type: MSELoss
   train:
     optimizer:
-      lr: 0.01
+      lr: 0.05
   eval:
     metrics: ['mse','imp_ratio']
     base: 0.734011
@@ -176,7 +192,7 @@ client_13:
     type: MSELoss
   train:
     optimizer:
-      lr: 0.005
+      lr: 0.05
   # grad:
   #   grad_clip: 1.0
   eval:
