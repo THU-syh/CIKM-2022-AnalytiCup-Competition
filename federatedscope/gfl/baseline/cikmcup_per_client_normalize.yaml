@@ -125,9 +125,10 @@ client_9:
   criterion:
     type: MSELoss
   train:
-    local_update_steps: 5
+    local_update_steps: 1
     optimizer:
-      lr: 0.05
+      lr: 0.1
+      momentum: 0.
   eval:
     metrics: ['mse','imp_ratio']
     base: 0.059199
@@ -137,7 +138,7 @@ client_9:
                'std': [0.3795],
               }
              ]]
-    batch_size: 256
+    batch_size: 64
 client_10:
   model:
     out_channels: 10
@@ -190,16 +191,17 @@ client_12:
     local_update_steps: 20
     optimizer:
       lr: 0.01
+      momentum: 0.
   eval:
     metrics: ['mse','imp_ratio']
     base: 1.361326
   data:
-    target_transform: [['Normalize',
-              {'mean': [-3.0899],
-               'std': [2.0798],
-              }
-             ]]
     batch_size: 16
+  #   target_transform: [['Normalize',
+  #             {'mean': [-3.0899],
+  #              'std': [2.0798],
+  #             }
+  #            ]]
 client_13:
   model:
     out_channels: 12
