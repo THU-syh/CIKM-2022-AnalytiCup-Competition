@@ -19,7 +19,8 @@ AGGREGATOR_TYPE = {
     "ditto": "clients_avg",  # Ditto
     "fedsageplus": "clients_avg",
     "gcflplus": "clients_avg",
-    "fedopt": "fedopt"
+    "fedopt": "fedopt",
+    "adaptupdate": "clients_avg",
 }
 
 CLIENTS_TYPE = {
@@ -31,7 +32,8 @@ CLIENTS_TYPE = {
     # models
     "fedsageplus": "fedsageplus",  # FedSage+ for graph data
     "gcflplus": "gcflplus",  # GCFL+ for graph data
-    "gradascent": "gradascent"
+    "gradascent": "gradascent",
+    "adaptupdate": "normal",
 }
 
 SERVER_TYPE = {
@@ -42,4 +44,5 @@ SERVER_TYPE = {
     # models
     "fedsageplus": "fedsageplus",  # FedSage+ for graph data
     "gcflplus": "gcflplus",  # GCFL+ for graph data
+    "adaptupdate": "normal",
 }

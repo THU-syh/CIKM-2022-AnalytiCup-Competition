@@ -1,15 +1,20 @@
 use_gpu: True
 device: 0
+seed: 0
 early_stop:
-  patience: 20
+  delta: 0.0
+  patience: 0
   improve_indicator_mode: best
-  the_smaller_the_better: True
+  the_smaller_the_better: False
 federate:
   mode: standalone
+  method: gcflplus
+  ignore_weight: True
   make_global_eval: False
-  total_round_num: 1000
+  total_round_num: 100
   share_local_model: False
   client_num: 13
+  clients_id: []
 data:
   batch_size: 64
   root: data/
@@ -19,18 +24,24 @@ model:
   hidden: 64
   task: graph
 personalization:
-  local_param: ['encoder_atom', 'encoder', 'clf', 'norms']
+  local_param: ['encoder_atom', 'encoder', 'clf']
+gcflplus:
+  EPS_1: 0.1
+  EPS_2: 0.1
+  seq_length: 5
+  standardize: False
 train:
   batch_or_epoch: epoch
   local_update_steps: 1
   optimizer:
     weight_decay: 0.0005
     type: SGD
+    momentum: 0.9
 trainer:
   type: graphminibatch_trainer
 eval:
   freq: 1
   report: ['avg']
-  best_res_update_round_wise_key: val_avg_loss
+  best_res_update_round_wise_key: val_imp_ratio
   count_flops: False
 

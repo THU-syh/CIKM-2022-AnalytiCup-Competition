@@ -125,7 +125,7 @@ client_9:
   criterion:
     type: MSELoss
   train:
-    local_update_steps: 1
+    local_update_steps: 5
     optimizer:
       lr: 0.1
       momentum: 0.
@@ -138,7 +138,7 @@ client_9:
                'std': [0.3795],
               }
              ]]
-    batch_size: 64
+    batch_size: 256
 client_10:
   model:
     out_channels: 10
@@ -197,11 +197,11 @@ client_12:
     base: 1.361326
   data:
     batch_size: 16
-  #   target_transform: [['Normalize',
-  #             {'mean': [-3.0899],
-  #              'std': [2.0798],
-  #             }
-  #            ]]
+    target_transform: [['Normalize',
+              {'mean': [-3.0899],
+               'std': [2.0798],
+              }
+             ]]
 client_13:
   model:
     out_channels: 12
