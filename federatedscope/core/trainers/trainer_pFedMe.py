@@ -61,9 +61,6 @@ def wrap_pFedMeTrainer(
         new_hook=hook_on_batch_start_init_pfedme,
         target_trigger="on_batch_start",
         target_hook_name=None)
-    # base_trainer.replace_hook_in_eval(new_hook=hook_on_batch_start_init_pfedme,
-    #                                   target_trigger="on_batch_start",
-    #                                   target_hook_name=None)
 
     return base_trainer
 
