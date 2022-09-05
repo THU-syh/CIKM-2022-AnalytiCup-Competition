@@ -26,8 +26,8 @@ def wrap_pFedMeTrainer(
         trigger="on_fit_start",
         insert_pos=-1)
     base_trainer.register_hook_in_train(
-        new_hook=hook_on_epoch_end_update_local,
-        trigger="on_epoch_end",
+        new_hook=hook_on_batch_end_update_local,
+        trigger="on_batch_end",
         insert_pos=-1)
     base_trainer.register_hook_in_train(new_hook=hook_on_fit_end_update_local,
                                         trigger="on_fit_end",
@@ -77,7 +77,10 @@ def init_pFedMe_ctx(base_trainer):
     # pFedMe finds approximate model with K steps using the same data batch
     # the complexity of each pFedMe client is K times the one of FedAvg
     ctx.pFedMe_K = cfg.personalization.K
-    ctx.num_train_epoch *= ctx.pFedMe_K
+    # ctx.num_train_epoch *= ctx.pFedMe_K
+    ctx.num_train_batch *= ctx.pFedMe_K
+    ctx.num_train_batch_last_epoch *= ctx.pFedMe_K
+    ctx.num_total_train_batch *= ctx.pFedMe_K
     ctx.pFedMe_approx_fit_counter = 0
 
     # the local_model_tmp is used to be the referenced parameter when
@@ -137,7 +140,7 @@ def _hook_on_epoch_end_flop_count(ctx):
     ctx.monitor.total_flops += ctx.monitor.total_model_size / 2
 
 
-def hook_on_epoch_end_update_local(ctx):
+def hook_on_batch_end_update_local(ctx):
     # update local weight after finding approximate theta
     for client_param, local_para_tmp in zip(
             ctx.model.parameters(), ctx.pFedMe_local_model_tmp.parameters()):
