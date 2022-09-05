@@ -418,7 +418,10 @@ class Client(Worker):
                 round_wise_update_key=self._cfg.eval.
                 best_res_update_round_wise_key)
             if update_best_this_round:
-                model_param = self.ctx.model.state_dict() if self._cfg.federate.share_local_model else self.trainer.ctx.model.cpu().state_dict()
+                try:
+                    model_param = self.trainer.ctx.local_model.cpu().state_dict()
+                except:
+                    model_param = self.trainer.ctx.model.cpu().state_dict()
                 self.trainer.ctx.best_model = copy.deepcopy(model_param)
             self.history_results = merge_dict(
                 self.history_results, formatted_eval_res['Results_raw'])

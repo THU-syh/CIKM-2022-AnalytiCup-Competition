@@ -25,12 +25,9 @@ model:
   task: graph
 personalization:
   local_param: ['encoder_atom', 'encoder', 'clf']
-  K: 3
+  K: 5
   beta: 1.0
-  local_update_steps: 3
-  lr: 0.8
   regular_weight: 1.0
-  share_non_trainable_para: false
 train:
   batch_or_epoch: epoch
   local_update_steps: 1

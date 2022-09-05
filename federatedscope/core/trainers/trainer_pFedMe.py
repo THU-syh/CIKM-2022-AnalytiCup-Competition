@@ -39,6 +39,15 @@ def wrap_pFedMeTrainer(
     base_trainer.register_hook_in_train(new_hook=_hook_on_epoch_end_flop_count,
                                         trigger="on_epoch_end",
                                         insert_pos=-1)
+    # evaluation is based on the local personalized model
+    base_trainer.register_hook_in_eval(
+        new_hook=hook_on_fit_start_switch_local_model,
+        trigger="on_fit_start",
+        insert_pos=0)
+    base_trainer.register_hook_in_eval(
+        new_hook=hook_on_fit_end_switch_global_model,
+        trigger="on_fit_end",
+        insert_pos=-1)
 
     # for "on_batch_start" trigger: replace the original hooks into new ones
     # of pFedMe
@@ -52,9 +61,9 @@ def wrap_pFedMeTrainer(
         new_hook=hook_on_batch_start_init_pfedme,
         target_trigger="on_batch_start",
         target_hook_name=None)
-    base_trainer.replace_hook_in_eval(new_hook=hook_on_batch_start_init_pfedme,
-                                      target_trigger="on_batch_start",
-                                      target_hook_name=None)
+    # base_trainer.replace_hook_in_eval(new_hook=hook_on_batch_start_init_pfedme,
+    #                                   target_trigger="on_batch_start",
+    #                                   target_hook_name=None)
 
     return base_trainer
 
@@ -78,6 +87,9 @@ def init_pFedMe_ctx(base_trainer):
     # finding the approximate \theta in paper
     # will be copied from model every run_routine
     ctx.pFedMe_local_model_tmp = None
+    ctx.local_model = copy.deepcopy(ctx.model)
+    ctx.global_model = copy.deepcopy(ctx.model)
+    ctx.model = ctx.global_model
 
 
 def hook_on_fit_start_set_local_para_tmp(ctx):
@@ -146,8 +158,17 @@ def hook_on_epoch_end_update_local(ctx):
 
 
 def hook_on_fit_end_update_local(ctx):
+    ctx.local_model = copy.deepcopy(ctx.model)
     for param, local_para_tmp in zip(ctx.model.parameters(),
                                      ctx.pFedMe_local_model_tmp.parameters()):
         param.data = local_para_tmp.data
 
     del ctx.pFedMe_local_model_tmp
+
+def hook_on_fit_start_switch_local_model(ctx):
+    ctx.model = ctx.local_model
+    ctx.model.eval()
+
+
+def hook_on_fit_end_switch_global_model(ctx):
+    ctx.model = ctx.global_model

@@ -167,8 +167,20 @@ class ServerClientsInterpolateAggregator(ClientsAvgAggregator):
         global_local_models = [((1 - self.beta), global_model.state_dict()),
                                (self.beta, avg_model_by_clients)]
 
-        avg_model_by_interpolate = self._para_weighted_avg(global_local_models)
+        avg_model_by_interpolate = self._interpolate_model(global_local_models)
+        # avg_model_by_interpolate = self._para_weighted_avg(global_local_models)
         return avg_model_by_interpolate
+
+    def _interpolate_model(self, models):
+        _, global_model = models[0]
+        beta, avg_model = models[1]
+        for key in global_model:
+            global_model[key] = param2tensor(global_model[key])*(1-beta)
+        for key in avg_model:
+            avg_model[key] = param2tensor(avg_model[key])
+            global_model[key] += avg_model[key] * beta
+
+        return global_model
 
 
 class FedOptAggregator(ClientsAvgAggregator):
