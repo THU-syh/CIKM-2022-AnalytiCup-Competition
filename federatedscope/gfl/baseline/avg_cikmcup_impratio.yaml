@@ -23,6 +23,9 @@ model:
   type: gin
   hidden: 64
   task: graph
+  out_channels: 2
+  pretrained: False
+  pretrained_file: 'premodels/1_bestmodel.pt'
 personalization:
   local_param: ['encoder_atom', 'encoder', 'clf']
 train:

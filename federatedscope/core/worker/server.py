@@ -47,6 +47,10 @@ class Server(Worker):
                  **kwargs):
 
         super(Server, self).__init__(ID, state, config, model, strategy)
+        if self._cfg.model.pretrained and not self._cfg.model.pretrained_file == '':
+            import torch
+            pretrained_model = torch.load(self._cfg.model.pretrained_file)['model']
+            self._model.load_state_dict(pretrained_model,strict=False)
 
         self.data = data
         self.device = device
@@ -59,10 +63,10 @@ class Server(Worker):
 
         if self._cfg.federate.share_local_model:
             # put the model to the specified device
-            model.to(device)
+            self._model.to(device)
         # Build aggregator
         self.aggregator = get_aggregator(self._cfg.federate.method,
-                                         model=model,
+                                         model=self._model,
                                          device=device,
                                          online=self._cfg.federate.online_aggr,
                                          config=self._cfg)
@@ -635,6 +639,10 @@ class Server(Worker):
         if self.check_client_join_in():
             if self._cfg.federate.use_ss:
                 self.broadcast_client_address()
+            logger.info(
+                '----------- Init evaluation (Round #{:d}) -------------'.
+                format(self.state))
+            self.eval()
             logger.info(
                 '----------- Starting training (Round #{:d}) -------------'.
                 format(self.state))

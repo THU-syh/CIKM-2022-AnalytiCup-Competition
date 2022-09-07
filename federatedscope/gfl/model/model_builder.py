@@ -8,7 +8,7 @@ from federatedscope.gfl.model.gat import GAT_Net
 from federatedscope.gfl.model.gin import GIN_Net
 from federatedscope.gfl.model.gpr import GPR_Net
 from federatedscope.gfl.model.link_level import GNN_Net_Link
-from federatedscope.gfl.model.graph_level import GNN_Net_Graph
+from federatedscope.gfl.model.graph_level import GNN_Net_Graph,myGNN_Net_Graph
 from federatedscope.gfl.model.mpnn import MPNNs2s
 
 
@@ -77,6 +77,14 @@ def get_gnn(model_config, local_data):
                             out_channels=model_config.out_channels,
                             num_nn=data.num_edge_features,
                             hidden=model_config.hidden)
+        elif model_config.project:
+            model = myGNN_Net_Graph(data.x.shape[-1],
+                                  max(model_config.out_channels, num_label),
+                                  hidden=model_config.hidden,
+                                  max_depth=model_config.layer,
+                                  dropout=model_config.dropout,
+                                  gnn=model_config.type,
+                                  pooling=model_config.graph_pooling)
         else:
             model = GNN_Net_Graph(data.x.shape[-1],
                                   max(model_config.out_channels, num_label),

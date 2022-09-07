@@ -23,10 +23,13 @@ model:
   type: gin
   hidden: 64
   task: graph
+  out_channels: 2
+  pretrained: False
+  pretrained_file: 'premodels/1_bestmodel.pt'
 personalization:
   local_param: ['encoder_atom', 'encoder', 'clf']
   local_update_steps: 3
-  regular_weight: 1.0
+  regular_weight: 0.1
 train:
   batch_or_epoch: epoch
   local_update_steps: 1

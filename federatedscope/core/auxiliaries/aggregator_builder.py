@@ -36,6 +36,11 @@ def get_aggregator(method, model=None, device=None, online=False, config=None):
             return ClientsAvgAggregator(model=model,
                                         device=device,
                                         config=config)
+    elif aggregator_type == "clients_avg_finetune":
+        from federatedscope.mypfl.trainer import FinetuneAggregator
+        return FinetuneAggregator(model=model,
+                                  device=device,
+                                  config=config)
     elif aggregator_type == 'server_clients_interpolation':
         return ServerClientsInterpolateAggregator(
             model=model,

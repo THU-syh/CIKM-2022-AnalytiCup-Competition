@@ -2,6 +2,7 @@ client_1:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/1_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -24,6 +25,7 @@ client_2:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/2_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -46,6 +48,7 @@ client_3:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/3_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -68,6 +71,7 @@ client_4:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/4_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -90,6 +94,7 @@ client_5:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/5_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -112,6 +117,7 @@ client_6:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/6_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -134,6 +140,7 @@ client_7:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/7_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -156,6 +163,7 @@ client_8:
   model:
     out_channels: 2
     task: graphClassification
+    pretrained_file: 'premodels/8_bestmodel.pt'
   criterion:
     type: CrossEntropyLoss
   train:
@@ -178,6 +186,7 @@ client_9:
   model:
     out_channels: 1
     task: graphRegression
+    pretrained_file: 'premodels/9_bestmodel.pt'
   criterion:
     type: MSELoss
   train:
@@ -207,6 +216,7 @@ client_10:
   model:
     out_channels: 10
     task: graphRegression
+    pretrained_file: 'premodels/10_bestmodel.pt'
   criterion:
     type: MSELoss
   train:
@@ -234,6 +244,7 @@ client_11:
   model:
     out_channels: 1
     task: graphRegression
+    pretrained_file: 'premodels/11_bestmodel.pt'
   criterion:
     type: MSELoss
   train:
@@ -261,6 +272,7 @@ client_12:
   model:
     out_channels: 1
     task: graphRegression
+    pretrained_file: 'premodels/12_bestmodel.pt'
   criterion:
     type: MSELoss
   train:
@@ -290,6 +302,7 @@ client_13:
   model:
     out_channels: 12
     task: graphRegression
+    pretrained_file: 'premodels/13_bestmodel.pt'
   criterion:
     type: MSELoss
   train:

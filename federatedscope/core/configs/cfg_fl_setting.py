@@ -13,7 +13,6 @@ def extend_fl_setting_cfg(cfg):
     cfg.federate = CN()
 
     cfg.federate.client_num = 0
-    cfg.federate.clients_id = [] # just for cikmcup
     cfg.federate.sample_client_num = -1
     cfg.federate.sample_client_rate = -1.0
     cfg.federate.unseen_clients_rate = 0.0
@@ -37,6 +36,10 @@ def extend_fl_setting_cfg(cfg):
     ]  # The information requirements (from server) for join_in
     cfg.federate.sampler = 'uniform'  # the strategy for sampling client in
     # each training round, ['uniform', 'group']
+
+    # just for cikmcup
+    cfg.federate.clients_id = []
+    cfg.federate.start_finetune_round = 100
 
     # ---------------------------------------------------------------------- #
     # Distribute training related options

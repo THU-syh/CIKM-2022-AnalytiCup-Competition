@@ -1,6 +1,7 @@
 # project specific
 doc/build
 *.log
+premodels/
 
 # ml log
 wandb/

@@ -45,6 +45,10 @@ class Client(Worker):
                  **kwargs):
 
         super(Client, self).__init__(ID, state, config, model, strategy)
+        if self._cfg.model.pretrained and not self._cfg.model.pretrained_file == '':
+            import torch
+            pretrained_model = torch.load(self._cfg.model.pretrained_file)['model']
+            self._model.load_state_dict(pretrained_model,strict=False)
 
         # the unseen_client indicates that whether this client contributes to
         # FL process by training on its local data and uploading the local
@@ -62,7 +66,7 @@ class Client(Worker):
 
         # Build Trainer
         # trainer might need configurations other than those of trainer node
-        self.trainer = get_trainer(model=model,
+        self.trainer = get_trainer(model=self._model,
                                    data=data,
                                    device=device,
                                    config=self._cfg,
@@ -418,9 +422,9 @@ class Client(Worker):
                 round_wise_update_key=self._cfg.eval.
                 best_res_update_round_wise_key)
             if update_best_this_round:
-                try:
+                if getattr(self.trainer.ctx,'local_model',None):
                     model_param = self.trainer.ctx.local_model.cpu().state_dict()
-                except:
+                else:
                     model_param = self.trainer.ctx.model.cpu().state_dict()
                 self.trainer.ctx.best_model = copy.deepcopy(model_param)
             self.history_results = merge_dict(
@@ -454,7 +458,10 @@ class Client(Worker):
         # Save final prediction result
         if self._cfg.data.type == 'cikmcup':
             # Evaluate
-            self.trainer.ctx.model.load_state_dict(self.trainer.ctx.best_model,strict=self._cfg.federate.share_local_model)
+            if getattr(self.trainer.ctx,'local_model',None):
+                self.trainer.ctx.local_model.load_state_dict(self.trainer.ctx.best_model,strict=False)
+            else:
+                self.trainer.ctx.model.load_state_dict(self.trainer.ctx.best_model,strict=False)
             self.trainer.save_model(path=os.path.join(self._cfg.outdir,f"{self.ID}_bestmodel.pt"))
             self.trainer.evaluate(target_data_split_name='test')
             self.trainer.save_prediction(self._cfg.outdir, self.ID, self._cfg.model.task)

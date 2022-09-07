@@ -120,7 +120,7 @@ def get_trainer(model=None,
         from federatedscope.core.trainers import wrap_pFedMeTrainer
         # wrap style: instance a (class A) -> instance a (class A)
         trainer = wrap_pFedMeTrainer(trainer)
-    elif config.federate.method.lower() == "ditto":
+    elif config.federate.method.lower() in ["ditto","ditto_finetune"]:
         from federatedscope.core.trainers import wrap_DittoTrainer
         # wrap style: instance a (class A) -> instance a (class A)
         trainer = wrap_DittoTrainer(trainer)
