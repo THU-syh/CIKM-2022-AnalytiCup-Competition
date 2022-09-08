@@ -115,6 +115,7 @@ def init_Ditto_ctx(base_trainer):
             ctx.num_train_batch_last_epoch_for_local_model
     else:
         ctx.num_train_epoch += ctx.num_train_epoch_for_local_model
+    ctx.regular_weight = ctx.cfg.personalization.regular_weight
 
 
 def hook_on_fit_start_set_regularized_para(ctx):
@@ -133,7 +134,7 @@ def hook_on_fit_start_set_regularized_para(ctx):
                                                   **ctx.cfg.train.optimizer)
 
     ctx.optimizer_for_local_model = wrap_regularized_optimizer(
-        ctx.optimizer_for_local_model, ctx.cfg.personalization.regular_weight)
+        ctx.optimizer_for_local_model, ctx.regular_weight)
 
     ctx.optimizer_for_local_model.set_compared_para_group(
         compared_global_model_para)

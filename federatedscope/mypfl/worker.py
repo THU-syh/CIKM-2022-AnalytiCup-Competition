@@ -127,7 +127,7 @@ class FinetuneClient(Client):
             self.trainer.update(content,
                                 strict=self._cfg.federate.share_local_model)
         elif round == self._cfg.federate.start_finetune_round+1:
-            self.trainer.ctx.cfg.personalization.regular_weight = 0
+            self.trainer.ctx.regular_weight = 0
             self.early_stopper.patience = 10
             if getattr(self.trainer.ctx,'local_model',None):
                 self.trainer.ctx.local_model.load_state_dict(self.trainer.ctx.best_model,strict=False)
@@ -218,6 +218,7 @@ class FinetuneClient(Client):
                 role='Client #{}'.format(self.ID),
                 forms='raw',
                 return_raw=True)
+            logger.info(formatted_eval_res)
             update_best_this_round = self._monitor.update_best_result(
                 self.best_results,
                 formatted_eval_res['Results_raw'],

@@ -90,6 +90,7 @@ def init_pFedMe_ctx(base_trainer):
     ctx.local_model = copy.deepcopy(ctx.model)
     ctx.global_model = copy.deepcopy(ctx.model)
     ctx.model = ctx.global_model
+    ctx.regular_weight = ctx.cfg.personalization.regular_weight
 
 
 def hook_on_fit_start_set_local_para_tmp(ctx):
@@ -97,7 +98,7 @@ def hook_on_fit_start_set_local_para_tmp(ctx):
     # besides, there are two distinct lr for the approximate model and base
     # model
     ctx.optimizer = wrap_regularized_optimizer(
-        ctx.optimizer, ctx.cfg.personalization.regular_weight)
+        ctx.optimizer, ctx.regular_weight)
     for g in ctx.optimizer.param_groups:
         g['lr'] = ctx.cfg.personalization.lr
     ctx.pFedMe_outer_lr = ctx.cfg.train.optimizer.lr
