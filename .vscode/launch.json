@@ -19,7 +19,11 @@
                 "train.local_update_steps",
                 "1",
                 "federate.total_round_num",
-                "100",
+                "2",
+                "model.type",
+                "gat",
+                "federate.client_num",
+                "2",
             ],
         }
     ]

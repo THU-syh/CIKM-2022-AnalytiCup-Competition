@@ -6,7 +6,7 @@ import numpy as np
 from federatedscope.core.message import Message
 from federatedscope.core.worker.server import Server
 from federatedscope.core.worker.client import Client
-from federatedscope.core.auxiliaries.utils import merge_dict
+from federatedscope.core.auxiliaries.utils import merge_dict, merge_param_dict
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +67,10 @@ class FinetuneServer(Server):
                         'recover_fun': self.recover_fun
                     }
                     result = aggregator.aggregate(agg_info)
-                    model.load_state_dict(result, strict=False)
+                    # Due to lazy load, we merge two state dict
+                    merged_param = merge_param_dict(model.state_dict().copy(), result)
+                    model.load_state_dict(merged_param, strict=False)
+                    # model.load_state_dict(result, strict=False)
 
                 self.state += 1
                 if self.state == self._cfg.federate.start_finetune_round:

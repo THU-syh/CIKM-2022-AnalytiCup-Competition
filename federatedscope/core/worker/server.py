@@ -9,7 +9,7 @@ from federatedscope.core.communication import StandaloneCommManager, \
 from federatedscope.core.worker import Worker
 from federatedscope.core.auxiliaries.aggregator_builder import get_aggregator
 from federatedscope.core.auxiliaries.sampler_builder import get_sampler
-from federatedscope.core.auxiliaries.utils import merge_dict, Timeout
+from federatedscope.core.auxiliaries.utils import merge_dict, Timeout, merge_param_dict
 from federatedscope.core.auxiliaries.trainer_builder import get_trainer
 from federatedscope.core.secret_sharing import AdditiveSecretSharing
 
@@ -309,7 +309,10 @@ class Server(Worker):
                         'recover_fun': self.recover_fun
                     }
                     result = aggregator.aggregate(agg_info)
-                    model.load_state_dict(result, strict=False)
+                    # Due to lazy load, we merge two state dict
+                    merged_param = merge_param_dict(model.state_dict().copy(), result)
+                    model.load_state_dict(merged_param, strict=False)
+                    # model.load_state_dict(result, strict=False)
 
                 self.state += 1
                 if self.state % self._cfg.eval.freq == 0 and self.state != \
