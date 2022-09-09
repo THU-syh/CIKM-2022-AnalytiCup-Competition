@@ -458,6 +458,14 @@ class Client(Worker):
 
         # Save final prediction result
         if self._cfg.data.type == 'cikmcup':
+            metrics = list(self.best_results.values())[0]
+            formatted_eval_res = self._monitor.format_eval_res(
+                metrics,
+                rnd='best',
+                role='Client #{}'.format(self.ID),
+                forms='raw',
+                return_raw=True)
+            logger.info(formatted_eval_res)
             # Evaluate
             if getattr(self.trainer.ctx,'local_model',None):
                 self.trainer.ctx.local_model.load_state_dict(self.trainer.ctx.best_model,strict=False)

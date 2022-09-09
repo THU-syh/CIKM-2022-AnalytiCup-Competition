@@ -191,7 +191,7 @@ class FinetuneClient(Client):
             self.trainer.update(message.content,
                                 strict=self._cfg.federate.share_local_model)
         if self.early_stopper.early_stopped and self._cfg.federate.method in [
-                "local", "global"
+                "local", "global", "ditto_finetune"
         ]:
             metrics = list(self.best_results.values())[0]
         else:
