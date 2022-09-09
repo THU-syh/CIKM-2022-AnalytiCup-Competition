@@ -20,6 +20,8 @@ data:
 model:
   type: gin
   hidden: 64
+  task: graph
+  out_channels: 2
 personalization:
   local_param: ['encoder_atom', 'encoder', 'clf']
 train:
