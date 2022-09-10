@@ -44,4 +44,5 @@ eval:
   report: ['avg']
   best_res_update_round_wise_key: val_imp_ratio
   count_flops: False
+  split: ['val']
 

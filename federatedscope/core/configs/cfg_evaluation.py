@@ -11,6 +11,7 @@ def extend_evaluation_cfg(cfg):
 
     cfg.eval.save_data = False
     cfg.eval.freq = 1
+    cfg.eval.predict_freq = 10
     cfg.eval.metrics = []
     cfg.eval.split = ['test', 'val']
     cfg.eval.report = ['weighted_avg', 'avg', 'fairness',

@@ -12,7 +12,7 @@ from federatedscope.core.auxiliaries.utils import merge_dict, merge_param_dict
 logger = logging.getLogger(__name__)
 
 
-class FinetuneServer(Server):
+class FirstIsolatedServer(Server):
     def check_and_move_on(self,
                           check_eval_result=False,
                           min_received_num=None):
@@ -67,6 +67,8 @@ class FinetuneServer(Server):
                         'client_feedback': msg_list,
                         'recover_fun': self.recover_fun
                     }
+                    if self.state < self._cfg.federate.start_finetune_round:
+                        aggregator.no_aggregate = True
                     result = aggregator.aggregate(agg_info)
                     # Due to lazy load, we merge two state dict
                     merged_param = merge_param_dict(model.state_dict().copy(), result)
@@ -74,9 +76,6 @@ class FinetuneServer(Server):
                     # model.load_state_dict(result, strict=False)
 
                 self.state += 1
-                if self.state == self._cfg.federate.start_finetune_round:
-                    for model_idx in range(self.model_num):
-                        self.aggregators[model_idx].no_aggregate = True
                 if self.state % self._cfg.eval.freq == 0 and self.state != \
                         self.total_round_num:
                     #  Evaluate
@@ -119,7 +118,7 @@ class FinetuneServer(Server):
 
         return move_on_flag
 
-class FinetuneClient(Client):
+class FirstIsolatedClient(Client):
     def callback_funcs_for_model_para(self, message: Message):
         round, sender, content = message.state, message.sender, \
                                     message.content
@@ -127,20 +126,24 @@ class FinetuneClient(Client):
         # ensure all the model params (which might be updated by other
         # clients in the previous local training process) are overwritten
         # and synchronized with the received model
-        if round <= self._cfg.federate.start_finetune_round:
-            self.trainer.update(content,
-                                strict=self._cfg.federate.share_local_model)
-        elif round == self._cfg.federate.start_finetune_round+1:
+        if round < self._cfg.federate.start_finetune_round:
             self.trainer.ctx.regular_weight = 0
-            self.early_stopper.patience = 10
+            self.early_stopper.patience = 0
+        elif round == self._cfg.federate.start_finetune_round:
+            self.trainer.ctx.regular_weight = 0.1
+            self.early_stopper.patience = 0
             if getattr(self.trainer.ctx,'local_model',None):
                 self.trainer.ctx.local_model.load_state_dict(self.trainer.ctx.best_model,strict=False)
             self.trainer.ctx.model.load_state_dict(self.trainer.ctx.best_model,strict=False)
+        else:
+            self.trainer.update(content,
+                                strict=self._cfg.federate.share_local_model)
+
 
         self.state = round
         skip_train_isolated_or_global_mode = \
             self.early_stopper.early_stopped and \
-            self._cfg.federate.method in ["local", "global", "ditto_finetune"]
+            self._cfg.federate.method in ["local", "global", "iso_ditto"]
         if self.is_unseen_client or skip_train_isolated_or_global_mode:
             # for these cases (1) unseen client (2) isolated_global_mode,
             # we do not local train and upload local model
@@ -213,9 +216,10 @@ class FinetuneClient(Client):
 
         sender = message.sender
         self.state = message.state
-        if self.state <= self._cfg.federate.start_finetune_round and message.content is not None:
+        if message.state > self._cfg.federate.start_finetune_round and message.content is not None:
             self.trainer.update(message.content,
                                 strict=self._cfg.federate.share_local_model)
+
         if self.early_stopper.early_stopped and self._cfg.federate.method in [
                 "local", "global", "ditto_finetune"
         ]:

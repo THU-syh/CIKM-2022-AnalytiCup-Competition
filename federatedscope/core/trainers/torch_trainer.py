@@ -309,7 +309,10 @@ class GeneralTorchTrainer(Trainer):
     def save_model(self, path, cur_round=-1):
         assert self.ctx.model is not None
 
-        ckpt = {'cur_round': cur_round, 'model': self.ctx.model.state_dict()}
+        if getattr(self.ctx,'local_model',None):
+            ckpt = {'cur_round': cur_round, 'model': self.ctx.local_model.state_dict()}
+        else:
+            ckpt = {'cur_round': cur_round, 'model': self.ctx.model.state_dict()}
         torch.save(ckpt, path)
 
     def load_model(self, path):

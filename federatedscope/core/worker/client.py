@@ -382,6 +382,27 @@ class Client(Worker):
         Arguments:
             message: The received message
         """
+
+        # Save prediction result
+        if self._cfg.data.type == 'cikmcup' and (message.state+1)%self._cfg.eval.predict_freq==0:
+            # Evaluate
+            if getattr(self.trainer.ctx,'local_model',None):
+                cache_model = self.trainer.ctx.local_model.state_dict()
+                self.trainer.ctx.local_model.load_state_dict(self.trainer.ctx.best_model,strict=False)
+            else:
+                cache_model = self.trainer.ctx.model.state_dict()
+                self.trainer.ctx.model.load_state_dict(self.trainer.ctx.best_model,strict=False)
+            dir = os.path.join(self._cfg.outdir,f'{message.state}')
+            os.makedirs(dir, exist_ok=True)
+            self.trainer.save_model(path=os.path.join(dir,f"{self.ID}_bestmodel.pt"))
+            self.trainer.evaluate(target_data_split_name='test')
+            self.trainer.save_prediction(dir, self.ID, self._cfg.model.task)
+            logger.info(f"Client #{self.ID} saved prediction results in {os.path.abspath(os.path.join(dir, 'prediction.csv'))}")
+            if getattr(self.trainer.ctx,'local_model',None):
+                self.trainer.ctx.local_model.load_state_dict(cache_model,strict=False)
+            else:
+                self.trainer.ctx.model.load_state_dict(cache_model,strict=False)
+
         sender = message.sender
         self.state = message.state
         if message.content is not None:
