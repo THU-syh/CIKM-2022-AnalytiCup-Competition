@@ -40,6 +40,7 @@ def extend_fl_setting_cfg(cfg):
     # just for cikmcup
     cfg.federate.clients_id = []
     cfg.federate.start_finetune_round = 100
+    cfg.federate.model_lambda = 1.0
 
     # ---------------------------------------------------------------------- #
     # Distribute training related options
