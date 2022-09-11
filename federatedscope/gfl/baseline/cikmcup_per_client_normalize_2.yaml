@@ -1,0 +1,330 @@
+client_1:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/1_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 30
+    optimizer:
+      lr: 0.01
+  finetune:
+    local_update_steps: 30
+    optimizer:
+      lr: 0.01
+  personalization:
+    lr: 0.01
+    local_update_steps: 30
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.263789
+  data:
+    batch_size: 128
+client_2:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/2_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  personalization:
+    lr: 0.01
+    local_update_steps: 20
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.289617
+  data:
+    batch_size: 8
+client_3:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/3_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.001
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.001
+  personalization:
+    lr: 0.001
+    local_update_steps: 20
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.355404
+  data:
+    batch_size: 128
+client_4:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/4_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  personalization:
+    lr: 0.01
+    local_update_steps: 20
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.176471
+  data:
+    batch_size: 8
+client_5:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/5_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.0001
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.0001
+  personalization:
+    lr: 0.0001
+    local_update_steps: 20
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.396825
+  data:
+    batch_size: 8
+client_6:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/6_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  personalization:
+    lr: 0.01
+    local_update_steps: 20
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.261580
+  data:
+    batch_size: 128
+client_7:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/7_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 30
+    optimizer:
+      lr: 0.01
+  finetune:
+    local_update_steps: 30
+    optimizer:
+      lr: 0.01
+  personalization:
+    lr: 0.01
+    local_update_steps: 30
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.302378
+  data:
+    batch_size: 128
+client_8:
+  model:
+    out_channels: 2
+    task: graphClassification
+    pretrained_file: 'premodels/8_bestmodel.pt'
+  criterion:
+    type: CrossEntropyLoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.005
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.005
+  personalization:
+    lr: 0.005
+    local_update_steps: 20
+  eval:
+    metrics: ['acc','imp_ratio']
+    base: 0.211538
+  data:
+    batch_size: 32
+client_9:
+  model:
+    out_channels: 1
+    task: graphRegression
+    pretrained_file: 'premodels/9_bestmodel.pt'
+  criterion:
+    type: MSELoss
+  train:
+    local_update_steps: 5
+    optimizer:
+      lr: 0.1
+      momentum: 0.
+  finetune:
+    local_update_steps: 1
+    optimizer:
+      lr: 0.1
+      momentum: 0.
+  personalization:
+    lr: 0.1
+    local_update_steps: 5
+  eval:
+    metrics: ['mse','imp_ratio']
+    base: 0.059199
+  data:
+    target_transform: [['Normalize',
+              {'mean': [1.5360],
+               'std': [0.3787],
+              }
+             ]]
+    batch_size: 64
+client_10:
+  model:
+    out_channels: 10
+    task: graphRegression
+    pretrained_file: 'premodels/10_bestmodel.pt'
+  criterion:
+    type: MSELoss
+  train:
+    local_update_steps: 5
+    optimizer:
+      lr: 0.05
+  finetune:
+    local_update_steps: 1
+    optimizer:
+      lr: 0.05
+  personalization:
+    lr: 0.05
+    local_update_steps: 5
+  eval:
+    metrics: ['mse','imp_ratio']
+    base: 0.007083
+  data:
+    target_transform: [['Normalize',
+              {'mean': [0.2142, 0.3929, 0.4393, 0.2142, 0.2142, 0.2142, 0.3723, 0.7066, 0.5433, 0.3379],
+               'std': [0.1307, 0.1014, 0.1209, 0.1307, 0.1307, 0.1307, 0.1071, 0.1372, 0.1423, 0.1046],
+              }
+             ]]
+    batch_size: 256
+client_11:
+  model:
+    out_channels: 1
+    task: graphRegression
+    pretrained_file: 'premodels/11_bestmodel.pt'
+  criterion:
+    type: MSELoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+  personalization:
+    lr: 0.01
+    local_update_steps: 20
+  eval:
+    metrics: ['mse','imp_ratio']
+    base: 0.734011
+  data:
+    target_transform: [['Normalize',
+              {'mean': [2.1919],
+               'std': [1.2011],
+              }
+             ]]
+    batch_size: 256
+client_12:
+  model:
+    out_channels: 1
+    task: graphRegression
+    pretrained_file: 'premodels/12_bestmodel.pt'
+  criterion:
+    type: MSELoss
+  train:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+      momentum: 0.
+  finetune:
+    local_update_steps: 20
+    optimizer:
+      lr: 0.01
+      momentum: 0.
+  personalization:
+    lr: 0.01
+    local_update_steps: 20
+  eval:
+    metrics: ['mse','imp_ratio']
+    base: 1.361326
+  data:
+    batch_size: 16
+    # target_transform: [['Normalize',
+    #           {'mean': [-3.0899],
+    #            'std': [2.0798],
+    #           }
+    #          ]]
+client_13:
+  model:
+    out_channels: 12
+    task: graphRegression
+    pretrained_file: 'premodels/13_bestmodel.pt'
+  criterion:
+    type: MSELoss
+  train:
+    local_update_steps: 5
+    optimizer:
+      lr: 0.005
+  finetune:
+    local_update_steps: 1
+    optimizer:
+      lr: 0.005
+  personalization:
+    lr: 0.005
+    local_update_steps: 5
+  # grad:
+  #   grad_clip: 1.0
+  eval:
+    metrics: ['mse','imp_ratio']
+    base: 0.004389
+  data:
+    target_transform: [['Normalize',
+              {'mean': [0.3603, 0.8600, 0.3424, 0.5235, 0.3608, 0.4221, 0.3575, 0.5763, 0.5012, 0.4644, 0.4353, 0.6247],
+               'std': [0.0985, 0.0482, 0.0792, 0.1227, 0.0987, 0.0606, 0.0979, 0.0658, 0.1273, 0.1189, 0.1139, 0.0992],
+              }
+             ]]
+    batch_size: 256

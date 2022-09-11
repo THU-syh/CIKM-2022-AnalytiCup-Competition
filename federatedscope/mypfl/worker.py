@@ -194,10 +194,10 @@ class FinetuneClient(Client):
         if self._cfg.data.type == 'cikmcup' and (message.state+1)%self._cfg.eval.predict_freq==0:
             # Evaluate
             if getattr(self.trainer.ctx,'local_model',None):
-                cache_model = self.trainer.ctx.local_model.state_dict()
+                cache_model = copy.deepcopy(self.trainer.ctx.local_model.state_dict())
                 self.trainer.ctx.local_model.load_state_dict(self.trainer.ctx.best_model,strict=False)
             else:
-                cache_model = self.trainer.ctx.model.state_dict()
+                cache_model = copy.deepcopy(self.trainer.ctx.model.state_dict())
                 self.trainer.ctx.model.load_state_dict(self.trainer.ctx.best_model,strict=False)
             dir = os.path.join(self._cfg.outdir,f'{message.state}')
             os.makedirs(dir, exist_ok=True)

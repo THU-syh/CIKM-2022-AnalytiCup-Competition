@@ -19,10 +19,10 @@
                 "train.local_update_steps",
                 "1",
                 "federate.total_round_num",
-                "2",
-                "model.type",
-                "gat",
+                "5",
                 "federate.client_num",
+                "2",
+                "eval.predict_freq",
                 "2",
             ],
         }
