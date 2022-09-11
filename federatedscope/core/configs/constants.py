@@ -18,6 +18,7 @@ AGGREGATOR_TYPE = {
     # interpolation
     "ditto": "clients_avg",  # Ditto
     "ditto_finetune": "clients_avg_finetune",
+    "smooth_ditto_finetune": "clients_avg_finetune",
     "iso_ditto": "clients_avg_finetune",
     "fedsageplus": "clients_avg",
     "gcflplus": "clients_avg",
@@ -32,6 +33,7 @@ CLIENTS_TYPE = {
     # loss
     "ditto": "normal",  # Ditto, + local training for distinct personalized
     "ditto_finetune": "finetune",
+    "smooth_ditto_finetune": "smoothfinetune",
     "iso_ditto": "iso_ditto",
     # models
     "fedsageplus": "fedsageplus",  # FedSage+ for graph data
@@ -46,6 +48,7 @@ SERVER_TYPE = {
     "pfedme": "normal",  # pFedMe, + regularization-based local loss
     "ditto": "normal",  # Ditto, + local training for distinct personalized
     "ditto_finetune": "finetune",
+    "smooth_ditto_finetune": "finetune",
     "iso_ditto": "iso_ditto",
     # models
     "fedsageplus": "fedsageplus",  # FedSage+ for graph data

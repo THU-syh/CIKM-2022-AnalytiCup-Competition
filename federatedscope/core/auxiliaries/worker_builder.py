@@ -35,6 +35,9 @@ def get_client_cls(cfg):
     elif client_type == "iso_ditto":
         from federatedscope.mypfl.iso_ditto.worker import FirstIsolatedClient
         return FirstIsolatedClient
+    elif client_type == "smoothfinetune":
+        from federatedscope.mypfl.worker import SmoothFinetuneClient
+        return SmoothFinetuneClient
     else:
         client_class = Client
 
