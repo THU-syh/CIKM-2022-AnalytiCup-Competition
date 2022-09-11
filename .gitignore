@@ -1,6 +1,7 @@
 # project specific
 doc/build
 *.log
+*.ipynb
 premodels/
 
 # ml log
