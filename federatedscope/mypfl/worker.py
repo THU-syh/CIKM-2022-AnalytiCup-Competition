@@ -272,12 +272,9 @@ class FinetuneClient(Client):
 
 class SmoothFinetuneClient(Client):
     def _interpolate_model(self, old_model,new_model,model_lambda):
-        for key in old_model:
-            old_model[key] = param2tensor(old_model[key])*(1-model_lambda)
         for key in new_model:
-            new_model[key] = param2tensor(new_model[key])
-            old_model[key] += new_model[key] * model_lambda
-        return old_model
+            new_model[key] = param2tensor(old_model[key])*(1-model_lambda)+param2tensor(new_model[key]) * model_lambda
+        return new_model
 
     def callback_funcs_for_model_para(self, message: Message):
         round, sender, content = message.state, message.sender, \
