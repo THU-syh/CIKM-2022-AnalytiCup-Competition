@@ -13,17 +13,19 @@
             "justMyCode": true,
             "args": [
                 "--cfg",
-                "federatedscope/gfl/baseline/isolated_cikmcup_impratio.yaml",
+                "federatedscope/gfl/baseline/ditto_cikmcup_impratio.yaml",
                 "--client_cfg",
                 "federatedscope/gfl/baseline/cikmcup_per_client_normalize.yaml",
                 "train.local_update_steps",
                 "1",
                 "federate.total_round_num",
-                "5",
+                "2",
                 "federate.client_num",
                 "2",
                 "eval.predict_freq",
-                "2",
+                "10",
+                "federate.method",
+                "smooth_ditto_finetune",
             ],
         }
     ]

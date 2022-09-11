@@ -284,7 +284,8 @@ class SmoothFinetuneClient(Client):
         # clients in the previous local training process) are overwritten
         # and synchronized with the received model
         old_model = copy.deepcopy(self.trainer.ctx.model.state_dict())
-        new_model = self._interpolate_model(old_model,content,self._cfg.federate.model_lambda)
+        new_model = self.trainer._param_filter(content)
+        new_model = self._interpolate_model(old_model,new_model,self._cfg.federate.model_lambda)
         if round <= self._cfg.federate.start_finetune_round:
             self.trainer.update(new_model,
                                 strict=self._cfg.federate.share_local_model)
@@ -372,7 +373,8 @@ class SmoothFinetuneClient(Client):
         sender = message.sender
         self.state = message.state
         old_model = copy.deepcopy(self.trainer.ctx.model.state_dict())
-        new_model = self._interpolate_model(old_model,message.content,self._cfg.federate.model_lambda)
+        new_model = self.trainer._param_filter(message.content)
+        new_model = self._interpolate_model(old_model,new_model,self._cfg.federate.model_lambda)
         if self.state <= self._cfg.federate.start_finetune_round and new_model is not None:
             self.trainer.update(new_model,
                                 strict=self._cfg.federate.share_local_model)
